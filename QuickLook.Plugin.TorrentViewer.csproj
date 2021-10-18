@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{863ECAAC-18D9-4256-A27D-0F308089FB47}</ProjectGuid>
     <OutputType>library</OutputType>
-    <RootNamespace>QuickLook.Plugin.HelloWorld</RootNamespace>
-    <AssemblyName>QuickLook.Plugin.HelloWorld</AssemblyName>
+    <RootNamespace>QuickLook.Plugin.TorrentViewer</RootNamespace>
+    <AssemblyName>QuickLook.Plugin.TorrentViewer</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -55,9 +55,13 @@
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -66,22 +70,42 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TorrentFileEntry.cs" />
+    <Compile Include="TorrentFileListView.xaml.cs" />
+    <Compile Include="TorrentInfoPanel.xaml.cs" />
+    <Compile Include="Converters.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="GitVersion.cs" />
+    <Compile Include="IconManager.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="QuickLook.Common\QuickLook.Common.csproj">
-      <Project>{85fdd6ba-871d-46c8-bd64-f6bb0cb5ea95}</Project>
-      <Name>QuickLook.Common</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="QuickLook.Plugin.Metadata.Base.config" />
     <None Include="QuickLook.Plugin.Metadata.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="QuickLook.Common\QuickLook.Common.csproj">
+      <Project>{85fdd6ba-871d-46c8-bd64-f6bb0cb5ea95}</Project>
+      <Name>QuickLook.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BencodeNET">
+      <Version>4.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="TorrentFileListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TorrentInfoPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

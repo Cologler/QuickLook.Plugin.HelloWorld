@@ -1,25 +1,29 @@
 ![QuickLook icon](https://user-images.githubusercontent.com/1687847/29485863-8cd61b7c-84e2-11e7-97d5-eacc2ba10d28.png)
 
-# QuickLook.Plugin.HelloWorld
+# QuickLook.Plugin.TorrentViewer
 
-This plugin illustrates the development process of [QuickLook](https://github.com/QL-Win/QuickLook).
+## How-To-Use
 
-## Try out
+1. Install plugin.
+2. Modify `QuickLook.exe.config` and add the following lines into `configuration/runtime` section:
 
-1. Go to [Release page](https://github.com/QL-Win/QuickLook.Plugin.HelloWorld/releases) and download the latest version.
-2. Make sure that you have QuickLook running in the background. Go to your Download folder, and press <key>Spacebar</key> on the downloaded `.qlplugin` file.
-3. Click the “Install” button in the popup window.
-4. Restart QuickLook.
-5. Create a file, change its extension to `.zzz`.
-6. Select the file and press <key>Spacebar</key>.
+``` xml
+<configuration>
+  <runtime>
 
-## Development
+    ...
 
- 1. Clone this project. Do not forget to update submodules.
- 2. Build project with `Release` profile.
- 3. Run `Scripts\pack-zip.ps1`.
- 4. You should find a file named `QuickLook.Plugin.HelloWorld.qlplugin` in the project directory.
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+	  <dependentAssembly>
+	    <assemblyIdentity name="System.Buffers" publicKeyToken="cc7b13ffcd2ddd51" culture="neutral" />
+	    <bindingRedirect oldVersion="0.0.0.0-4.0.3.0" newVersion="4.0.3.0"/>
+	  </dependentAssembly>
+    </assemblyBinding>
 
-## License
+    ...
 
-MIT License.
+  </runtime>
+</configuration>
+```
+
+Restart `QuickLook.exe`, it should support to preview torrent file now.
