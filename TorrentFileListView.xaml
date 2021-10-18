@@ -52,7 +52,8 @@
                                     </MultiBinding>
                                 </Image.Source>
                             </Image>
-                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock Text="{Binding Name}"
+                                       Margin="2,0,0,0"/>
                             <TextBlock
                                 Text="{Binding Encrypted, Converter={StaticResource BooleanToAsteriskConverter}}" />
                         </StackPanel>
