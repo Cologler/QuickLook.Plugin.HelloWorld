@@ -103,7 +103,8 @@ namespace QuickLook.Plugin.TorrentViewer
                     .Where(z => !z.Value.IsFolder)
                     .Select(z => z.Value)
                     .ToList();
-                var sizeU = files.Sum(z => (long) z.Size);
+
+                var totalSize = files.Sum(z => (long)z.Size).ToPrettySize(2);
 
                 Dispatcher.Invoke(() =>
                 {
@@ -114,7 +115,7 @@ namespace QuickLook.Plugin.TorrentViewer
                     archiveCount.Content = $"total {files.Count} files";
                     archiveSizeC.Content =
                         $"Compressed size {((long)_totalZippedSize).ToPrettySize(2)}";
-                    archiveSizeU.Content = $"Uncompressed size {((long)sizeU).ToPrettySize(2)}";
+                    TotalSize.Content = $"total size: {totalSize}";
                 });
 
                 LoadPercent = 100d;

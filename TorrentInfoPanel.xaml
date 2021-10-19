@@ -39,9 +39,21 @@
                     <ColumnDefinition Width="30*" />
                     <ColumnDefinition Width="30*" />
                 </Grid.ColumnDefinitions>
-                <Label x:Name="archiveCount" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}">0 folders and 0 files, solid, password-protected</Label>
-                <Label x:Name="archiveSizeC" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}">Compressed size 0 bytes</Label>
-                <Label x:Name="archiveSizeU" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource WindowTextForegroundAlternative}">Uncompressed size 0 bytes</Label>
+                <Label x:Name="archiveCount"
+                       Grid.Column="0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">0 folders and 0 files, solid, password-protected</Label>
+                <Label x:Name="archiveSizeC"
+                       Grid.Column="1"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">Compressed size 0 bytes</Label>
+                <Label x:Name="TotalSize"
+                       Grid.Column="2"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}">Uncompressed size 0 bytes</Label>
             </Grid>
         </Grid>
     </Grid>
