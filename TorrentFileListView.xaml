@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QuickLook.Plugin.TorrentViewer"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300"
+             d:DesignWidth="300">
     <Grid Grid.IsSharedSizeScope="True"
           x:Name="treeGrid">
         <Grid.RowDefinitions>
@@ -28,23 +29,22 @@
             <!-- Template for directory information at all levels -->
             <HierarchicalDataTemplate ItemsSource="{Binding Children.Keys}"
                                       DataType="{x:Type local:TorrentFileEntry}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="2" />
-                        <RowDefinition />
-                        <RowDefinition Height="2" />
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="1" ShowGridLines="False">
+                <Grid Margin="0,2">
+                    <Grid ShowGridLines="False">
                         <!-- All column widths are shared except for column 1 which is sized
                          to compensate for different indentation at each level -->
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="300" SharedSizeGroup="rowHeaderColumn" />
+                            <ColumnDefinition MinWidth="300"
+                                              Width="*"
+                                              SharedSizeGroup="NameColumn" />
                             <ColumnDefinition />
-                            <ColumnDefinition MinWidth="100" SharedSizeGroup="column1" />
-                            <ColumnDefinition MinWidth="100" SharedSizeGroup="column2" />
+                            <ColumnDefinition MinWidth="100"
+                                              SharedSizeGroup="SizeColumn" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Orientation="Horizontal">
-                            <Image Width="16" Height="16">
+                        <StackPanel Grid.Column="0"
+                                    Orientation="Horizontal">
+                            <Image Width="16"
+                                   Height="16">
                                 <Image.Source>
                                     <MultiBinding Converter="{StaticResource FileExtToIconConverter}">
                                         <Binding Path="Name" />
@@ -53,9 +53,7 @@
                                 </Image.Source>
                             </Image>
                             <TextBlock Text="{Binding Name}"
-                                       Margin="2,0,0,0"/>
-                            <TextBlock
-                                Text="{Binding Encrypted, Converter={StaticResource BooleanToAsteriskConverter}}" />
+                                       Margin="2,0,0,0" />
                         </StackPanel>
                         <Rectangle Grid.Column="1">
                             <Rectangle.Width>
@@ -66,18 +64,11 @@
                                 </MultiBinding>
                             </Rectangle.Width>
                         </Rectangle>
-                        <TextBlock Grid.Column="2">
+                        <TextBlock Grid.Column="2"
+                                   Margin="4,0,0,0">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource SizePrettyPrintConverter}">
                                     <Binding Path="Size" />
-                                    <Binding Path="IsFolder" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                        <TextBlock Grid.Column="3">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource DatePrintConverter}">
-                                    <Binding Path="ModifiedDate" />
                                     <Binding Path="IsFolder" />
                                 </MultiBinding>
                             </TextBlock.Text>
@@ -89,16 +80,18 @@
 
         <!-- Tree view with one item for the header row -->
 
-        <TreeView BorderThickness="0" Focusable="False" Background="Transparent"
+        <TreeView BorderThickness="0"
+                  Focusable="False"
+                  Background="Transparent"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <TreeViewItem Focusable="False" Visibility="Collapsed">
+            <TreeViewItem Focusable="False"
+                          Visibility="Collapsed">
                 <TreeViewItem.Header>
                     <Grid ShowGridLines="False">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition SharedSizeGroup="rowHeaderColumn" />
+                            <ColumnDefinition SharedSizeGroup="NameColumn" />
                             <ColumnDefinition />
-                            <ColumnDefinition SharedSizeGroup="column1" />
-                            <ColumnDefinition SharedSizeGroup="column2" />
+                            <ColumnDefinition SharedSizeGroup="SizeColumn" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
                                    Text=" " />
@@ -120,8 +113,6 @@
                         </TreeViewItem>
                         <TextBlock Grid.Column="2"
                                    Text="Original Size" />
-                        <TextBlock Grid.Column="3"
-                                   Text="Modified Date" />
                     </Grid>
                 </TreeViewItem.Header>
             </TreeViewItem>
@@ -131,11 +122,14 @@
 
         <TreeView Grid.Row="1"
                   x:Name="treeView"
-                  BorderThickness="0" Background="Transparent" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=local:TorrentFileListView}}"
+                  BorderThickness="0"
+                  Background="Transparent"
+                  Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=local:TorrentFileListView}}"
                   ItemsSource="{Binding}">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TreeView}}" />
+                    <Setter Property="Foreground"
+                            Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TreeView}}" />
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
