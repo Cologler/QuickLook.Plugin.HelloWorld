@@ -38,19 +38,31 @@
                 <RowDefinition />
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
-            <Grid>
+            <Grid.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="VerticalAlignment"
+                            Value="Center" />
+                    <Setter Property="Foreground"
+                            Value="{DynamicResource WindowTextForegroundAlternative}" />
+                </Style>
+            </Grid.Resources>
+            <Grid Margin="30,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
                 <Label x:Name="TorrentName"
                        Grid.Column="0"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Center"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
                        Content="UNKNOWN" />
+                <Label x:Name="TorrentBtih"
+                       Grid.Column="1" />
             </Grid>
             <local:TorrentFileListView Grid.Row="1"
                                        x:Name="fileListView"
                                        Focusable="False"
                                        Foreground="{DynamicResource WindowTextForeground}" />
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2"
+                  Margin="30,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40*" />
                     <ColumnDefinition Width="30*" />
@@ -58,17 +70,14 @@
                 </Grid.ColumnDefinitions>
                 <Label x:Name="TotalFilesCount"
                        Grid.Column="0"
-                       HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}">0 folders and 0 files, solid, password-protected</Label>
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}" />
                 <Label x:Name="archiveSizeC"
                        Grid.Column="1"
-                       HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}">Compressed size 0 bytes</Label>
                 <Label x:Name="TotalSize"
                        Grid.Column="2"
-                       HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="{DynamicResource WindowTextForegroundAlternative}">Uncompressed size 0 bytes</Label>
             </Grid>

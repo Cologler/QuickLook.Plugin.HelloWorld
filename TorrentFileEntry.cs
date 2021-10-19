@@ -44,6 +44,14 @@ namespace QuickLook.Plugin.TorrentViewer
 
         public bool IsFolder { get; set; }
 
+        public bool IsPaddingFile
+        {
+            get
+            {
+                return this.Name is string name && name.StartsWith("_____padding_file_");
+            }
+        }
+
         public ulong Size { get; set; }
 
         public DateTime ModifiedDate { get; set; }

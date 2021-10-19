@@ -155,6 +155,7 @@ namespace QuickLook.Plugin.TorrentViewer
                 }
 
                 var torrentName = torrent.DisplayNameUtf8 ?? torrent.DisplayName ?? String.Empty;
+                var btih = torrent.GetInfoHash();
 
                 this.Dispatcher.Invoke(() =>
                 {
@@ -162,6 +163,7 @@ namespace QuickLook.Plugin.TorrentViewer
                         return;
 
                     this.TorrentName.Content = $"Name: {torrentName}";
+                    this.TorrentBtih.Content = $"BTIH: {btih}";
                 });
             }
 
