@@ -104,6 +104,13 @@ namespace QuickLook.Plugin.TorrentViewer
                     .Select(z => z.Value)
                     .ToList();
 
+                var paddingFilesCount = files.Count(z => z.IsPaddingFile);
+                var totalFilesCount = $"Total {files.Count} files";
+                if (paddingFilesCount > 0)
+                {
+                    totalFilesCount += $" (included {paddingFilesCount} padding files)";
+                }
+
                 var totalSize = files.Sum(z => (long)z.Size).ToPrettySize(2);
 
                 Dispatcher.Invoke(() =>
@@ -112,10 +119,12 @@ namespace QuickLook.Plugin.TorrentViewer
                         return;
 
                     fileListView.SetDataContext(_fileEntries[""].Children.Keys);
-                    archiveCount.Content = $"total {files.Count} files";
+
+                    TotalFilesCount.Content = totalFilesCount;
                     archiveSizeC.Content =
                         $"Compressed size {((long)_totalZippedSize).ToPrettySize(2)}";
-                    TotalSize.Content = $"total size: {totalSize}";
+
+                    TotalSize.Content = $"Total size: {totalSize}";
                 });
 
                 LoadPercent = 100d;
@@ -144,6 +153,16 @@ namespace QuickLook.Plugin.TorrentViewer
                         }
                         break;
                 }
+
+                var torrentName = torrent.DisplayNameUtf8 ?? torrent.DisplayName ?? String.Empty;
+
+                this.Dispatcher.Invoke(() =>
+                {
+                    if (this._disposed)
+                        return;
+
+                    this.TorrentName.Content = $"Name: {torrentName}";
+                });
             }
 
             void ProcessFile(IList<string> pathList, long fileSize)
