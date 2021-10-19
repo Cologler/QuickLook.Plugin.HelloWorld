@@ -39,9 +39,13 @@ namespace QuickLook.Plugin.TorrentViewer
         public SortedList<TorrentFileEntry, bool> Children { get; set; } = new SortedList<TorrentFileEntry, bool>();
 
         public string Name { get; set; }
+
         public bool Encrypted { get; set; }
+
         public bool IsFolder { get; set; }
+
         public ulong Size { get; set; }
+
         public DateTime ModifiedDate { get; set; }
 
         /// <summary>

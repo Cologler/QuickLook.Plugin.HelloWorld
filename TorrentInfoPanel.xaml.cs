@@ -81,7 +81,7 @@ namespace QuickLook.Plugin.TorrentViewer
 
         private void BeginLoadArchive(string path)
         {
-            new Task(() =>
+            Task.Run(() =>
             {
                 _totalZippedSize = (ulong)new FileInfo(path).Length;
 
@@ -90,7 +90,7 @@ namespace QuickLook.Plugin.TorrentViewer
 
                 try
                 {
-                    LoadItemsFromArchive(path);
+                    LoadFromTorrent(path);
                 }
                 catch (Exception e)
                 {
@@ -99,28 +99,11 @@ namespace QuickLook.Plugin.TorrentViewer
                     return;
                 }
 
-                var folders = -1; // do not count root node
-                var files = 0;
-                ulong sizeU = 0L;
-                _fileEntries.ForEach(e =>
-                {
-                    if (e.Value.IsFolder)
-                        folders++;
-                    else
-                        files++;
-
-                    sizeU += e.Value.Size;
-                });
-
-                string t;
-                var d = folders != 0 ? $"{folders} folders" : string.Empty;
-                var f = files != 0 ? $"{files} files" : string.Empty;
-                if (!string.IsNullOrEmpty(d) && !string.IsNullOrEmpty(f))
-                    t = $", {d} and {f}";
-                else if (string.IsNullOrEmpty(d) && string.IsNullOrEmpty(f))
-                    t = string.Empty;
-                else
-                    t = $", {d}{f}";
+                var files = this._fileEntries
+                    .Where(z => !z.Value.IsFolder)
+                    .Select(z => z.Value)
+                    .ToList();
+                var sizeU = files.Sum(z => (long) z.Size);
 
                 Dispatcher.Invoke(() =>
                 {
@@ -128,18 +111,17 @@ namespace QuickLook.Plugin.TorrentViewer
                         return;
 
                     fileListView.SetDataContext(_fileEntries[""].Children.Keys);
-                    archiveCount.Content =
-                        $"{_type} archive{t}";
+                    archiveCount.Content = $"total {files.Count} files";
                     archiveSizeC.Content =
                         $"Compressed size {((long)_totalZippedSize).ToPrettySize(2)}";
                     archiveSizeU.Content = $"Uncompressed size {((long)sizeU).ToPrettySize(2)}";
                 });
 
                 LoadPercent = 100d;
-            }).Start();
+            });
         }
 
-        private void LoadItemsFromArchive(string torrentPath)
+        private void LoadFromTorrent(string torrentPath)
         {
             using (var stream = File.OpenRead(torrentPath))
             using (var reader = new BencodeReader(stream))
