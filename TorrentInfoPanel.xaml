@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:QuickLook.Plugin.TorrentViewer"
              mc:Ignorable="d"
              x:Name="infoPanel"
-             d:DesignHeight="600" d:DesignWidth="800">
+             d:DesignHeight="600"
+             d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,26 +21,42 @@
     <Grid>
         <Grid ZIndex="9999"
               Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityCollapsedConverter}}">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Label x:Name="lblLoading" FontSize="14" HorizontalAlignment="Center" Foreground="{DynamicResource WindowTextForeground}">Loading archive ...</Label>
-                <ProgressBar Height="13" Width="150"
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <Label x:Name="lblLoading"
+                       FontSize="14"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource WindowTextForeground}">Loading archive ...</Label>
+                <ProgressBar Height="13"
+                             Width="150"
                              Value="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay}" />
             </StackPanel>
         </Grid>
-        <Grid
-            Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityVisibleConverter}}">
+        <Grid Visibility="{Binding ElementName=infoPanel, Path=LoadPercent, Mode=OneWay, Converter={StaticResource Percent100ToVisibilityVisibleConverter}}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
                 <RowDefinition />
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
-            <local:TorrentFileListView Grid.Row="0" x:Name="fileListView" Focusable="False" Foreground="{DynamicResource WindowTextForeground}" />
-            <Grid Grid.Row="1">
+            <Grid>
+                <Label x:Name="TorrentName"
+                       Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource WindowTextForegroundAlternative}"
+                       Content="UNKNOWN" />
+            </Grid>
+            <local:TorrentFileListView Grid.Row="1"
+                                       x:Name="fileListView"
+                                       Focusable="False"
+                                       Foreground="{DynamicResource WindowTextForeground}" />
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40*" />
                     <ColumnDefinition Width="30*" />
                     <ColumnDefinition Width="30*" />
                 </Grid.ColumnDefinitions>
-                <Label x:Name="archiveCount"
+                <Label x:Name="TotalFilesCount"
                        Grid.Column="0"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
