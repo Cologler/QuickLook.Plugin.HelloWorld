@@ -155,8 +155,8 @@ namespace QuickLook.Plugin.TorrentViewer
                 }
 
                 var torrentName = torrent.DisplayNameUtf8 ?? torrent.DisplayName ?? String.Empty;
-                var btih = torrent.GetInfoHash();
-
+                var btih = torrent.OriginalInfoHash?.ToLower() ?? String.Empty;
+                
                 this.Dispatcher.Invoke(() =>
                 {
                     if (this._disposed)
