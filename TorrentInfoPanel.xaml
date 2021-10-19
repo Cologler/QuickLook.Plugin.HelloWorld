@@ -64,22 +64,13 @@
             <Grid Grid.Row="2"
                   Margin="30,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40*" />
-                    <ColumnDefinition Width="30*" />
-                    <ColumnDefinition Width="30*" />
+                    <ColumnDefinition Width="7*" />
+                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
                 <Label x:Name="TotalFilesCount"
-                       Grid.Column="0"
-                       VerticalAlignment="Center"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}" />
-                <Label x:Name="archiveSizeC"
-                       Grid.Column="1"
-                       VerticalAlignment="Center"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}">Compressed size 0 bytes</Label>
+                       Grid.Column="0"/>                
                 <Label x:Name="TotalSize"
-                       Grid.Column="2"
-                       VerticalAlignment="Center"
-                       Foreground="{DynamicResource WindowTextForegroundAlternative}">Uncompressed size 0 bytes</Label>
+                       Grid.Column="2" />
             </Grid>
         </Grid>
     </Grid>

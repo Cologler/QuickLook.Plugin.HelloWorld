@@ -83,8 +83,6 @@ namespace QuickLook.Plugin.TorrentViewer
         {
             Task.Run(() =>
             {
-                _totalZippedSize = (ulong)new FileInfo(path).Length;
-
                 var root = new TorrentFileEntry(Path.GetFileName(path), true);
                 _fileEntries.Add("", root);
 
@@ -121,8 +119,6 @@ namespace QuickLook.Plugin.TorrentViewer
                     fileListView.SetDataContext(_fileEntries[""].Children.Keys);
 
                     TotalFilesCount.Content = totalFilesCount;
-                    archiveSizeC.Content =
-                        $"Compressed size {((long)_totalZippedSize).ToPrettySize(2)}";
 
                     TotalSize.Content = $"Total size: {totalSize}";
                 });
