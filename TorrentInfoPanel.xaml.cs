@@ -93,7 +93,7 @@ namespace QuickLook.Plugin.TorrentViewer
                 catch (Exception e)
                 {
                     ProcessHelper.WriteLog(e.ToString());
-                    Dispatcher.Invoke(() => { lblLoading.Content = "Preview failed. See log for more details."; });
+                    Dispatcher.Invoke(() => lblLoading.Content = $"Preview failed:\n{e.Message}");
                     return;
                 }
 
