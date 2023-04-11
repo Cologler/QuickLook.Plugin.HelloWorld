@@ -46,17 +46,31 @@
                             Value="{DynamicResource WindowTextForegroundAlternative}" />
                 </Style>
             </Grid.Resources>
+            
             <Grid Margin="30,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*" />
                     <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                
                 <Label x:Name="TorrentName"
                        Grid.Column="0"
                        Content="UNKNOWN" />
+
                 <Label x:Name="TorrentBtih"
                        Grid.Column="1" />
+
+                <Button Grid.Column="2"
+                        Content="🧲"
+                        Background="Transparent"
+                        Foreground="OrangeRed"
+                        VerticalAlignment="Center"
+                        BorderThickness="0"
+                        Click="CopyMagnetUriButton_Click"/>
+
             </Grid>
+            
             <local:TorrentFileListView Grid.Row="1"
                                        x:Name="fileListView"
                                        Focusable="False"

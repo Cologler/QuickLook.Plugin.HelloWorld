@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 using BencodeNET.IO;
@@ -43,6 +44,7 @@ namespace QuickLook.Plugin.TorrentViewer
         private readonly Dictionary<string, TorrentFileEntry> _fileEntries = new Dictionary<string, TorrentFileEntry>();
         private bool _disposed;
         private double _loadPercent;
+        private string _magnetUri;
 
         public TorrentInfoPanel(string path)
         {
@@ -148,6 +150,8 @@ namespace QuickLook.Plugin.TorrentViewer
                         break;
                 }
 
+                this._magnetUri = TorrentUtil.CreateMagnetLink(torrent);
+
                 var torrentName = torrent.DisplayNameUtf8 ?? torrent.DisplayName ?? String.Empty;
                 var btih = torrent.OriginalInfoHash?.ToLower() ?? String.Empty;
                 
@@ -190,6 +194,21 @@ namespace QuickLook.Plugin.TorrentViewer
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void CopyMagnetUriButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (this._magnetUri is string uri)
+            {
+                try
+                {
+                    Clipboard.SetText(uri);
+                    return;
+                }
+                catch (Exception) { }
+            }
+
+            MessageBox.Show("Failed to copy magnet uri.");
         }
     }
 }
