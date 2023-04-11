@@ -33,10 +33,12 @@ namespace QuickLook.Plugin.TorrentViewer
             IsFolder = isFolder;
 
             _parent = parent;
-            _parent?.Children.Add(this, false);
+            _parent?.Children.Add(this);
         }
 
-        public SortedList<TorrentFileEntry, bool> Children { get; set; } = new SortedList<TorrentFileEntry, bool>();
+        public List<TorrentFileEntry> Children { get; } = new List<TorrentFileEntry>();
+
+        public IList<TorrentFileEntry> VisibileChildren => this.Children.Where(x => !x.IsPaddingFile).ToList();
 
         public string Name { get; set; }
 
@@ -94,7 +96,7 @@ namespace QuickLook.Plugin.TorrentViewer
             if (_cachedDepth != -1)
                 return _cachedDepth;
 
-            var max = Children.Keys.Count == 0 ? 0 : Children.Keys.Max(r => r.GetDepth());
+            var max = Children.Count == 0 ? 0 : Children.Max(r => r.GetDepth());
             _cachedDepth = max + 1;
             return _cachedDepth;
         }

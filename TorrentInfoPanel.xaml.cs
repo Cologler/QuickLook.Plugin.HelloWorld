@@ -43,8 +43,6 @@ namespace QuickLook.Plugin.TorrentViewer
         private readonly Dictionary<string, TorrentFileEntry> _fileEntries = new Dictionary<string, TorrentFileEntry>();
         private bool _disposed;
         private double _loadPercent;
-        private ulong _totalZippedSize;
-        private string _type;
 
         public TorrentInfoPanel(string path)
         {
@@ -106,7 +104,7 @@ namespace QuickLook.Plugin.TorrentViewer
                 var totalFilesCount = $"Total {files.Count} files";
                 if (paddingFilesCount > 0)
                 {
-                    totalFilesCount += $" (included {paddingFilesCount} padding files)";
+                    totalFilesCount += $" (with hided {paddingFilesCount} padding files)";
                 }
 
                 var totalSize = files.Sum(z => (long)z.Size).ToPrettySize(2);
@@ -116,7 +114,7 @@ namespace QuickLook.Plugin.TorrentViewer
                     if (_disposed)
                         return;
 
-                    fileListView.SetDataContext(_fileEntries[""].Children.Keys);
+                    fileListView.SetDataContext(root.VisibileChildren);
 
                     TotalFilesCount.Content = totalFilesCount;
 

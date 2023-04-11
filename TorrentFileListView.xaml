@@ -27,7 +27,7 @@
             <local:LevelToBooleanConverter x:Key="LevelToBooleanConverter" />
 
             <!-- Template for directory information at all levels -->
-            <HierarchicalDataTemplate ItemsSource="{Binding Children.Keys}"
+            <HierarchicalDataTemplate ItemsSource="{Binding VisibileChildren}"
                                       DataType="{x:Type local:TorrentFileEntry}">
                 <Grid Margin="0,2">
                     <Grid ShowGridLines="False">
