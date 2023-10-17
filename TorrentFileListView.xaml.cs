@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace QuickLook.Plugin.TorrentViewer
@@ -57,6 +58,36 @@ namespace QuickLook.Plugin.TorrentViewer
 
                 root.IsExpanded = true;
             };
+        }
+
+        private void CopyMd5SumLower_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is TorrentFileEntry fileEntry && fileEntry.Md5Sum?.Length > 0)
+            {
+                try
+                {
+                    Clipboard.SetText(fileEntry.Md5Sum.ToLower());
+                    return;
+                }
+                catch (Exception) { }
+
+                MessageBox.Show("Failed to copy Md5Sum.");
+            }
+        }
+
+        private void CopyMd5SumUpper_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is TorrentFileEntry fileEntry && fileEntry.Md5Sum?.Length > 0)
+            {
+                try
+                {
+                    Clipboard.SetText(fileEntry.Md5Sum.ToUpper());
+                    return;
+                }
+                catch (Exception) { }
+
+                MessageBox.Show("Failed to copy Md5Sum.");
+            }
         }
     }
 }

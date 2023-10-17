@@ -27,13 +27,14 @@ namespace QuickLook.Plugin.TorrentViewer
         private int _cachedDepth = -1;
         private int _cachedLevel = -1;
 
-        public TorrentFileEntry(string name, bool isFolder, TorrentFileEntry parent = null)
+        public TorrentFileEntry(string name, bool isFolder, TorrentFileEntry parent = null, string md5Sum = null)
         {
             Name = name;
             IsFolder = isFolder;
 
             _parent = parent;
             _parent?.Children.Add(this);
+            this.Md5Sum = md5Sum ?? string.Empty;
         }
 
         public List<TorrentFileEntry> Children { get; } = new List<TorrentFileEntry>();
@@ -55,6 +56,8 @@ namespace QuickLook.Plugin.TorrentViewer
         }
 
         public ulong Size { get; set; }
+
+        public string Md5Sum { get; }
 
         public DateTime ModifiedDate { get; set; }
 

@@ -26,8 +26,6 @@ using System.Windows;
 using System.Windows.Controls;
 
 using BencodeNET.IO;
-using BencodeNET.Objects;
-using BencodeNET.Parsing;
 using BencodeNET.Torrents;
 
 using QuickLook.Common.Annotations;
@@ -41,7 +39,6 @@ namespace QuickLook.Plugin.TorrentViewer
     /// </summary>
     public partial class TorrentInfoPanel : UserControl, IDisposable, INotifyPropertyChanged
     {
-        private readonly Dictionary<string, TorrentFileEntry> _fileEntries = new Dictionary<string, TorrentFileEntry>();
         private bool _disposed;
         private double _loadPercent;
         private string _magnetUri;
@@ -83,12 +80,10 @@ namespace QuickLook.Plugin.TorrentViewer
         {
             Task.Run(() =>
             {
-                var root = new TorrentFileEntry(Path.GetFileName(path), true);
-                _fileEntries.Add("", root);
-
+                Dictionary<string, TorrentFileEntry> nodeEntires;
                 try
                 {
-                    LoadFromTorrent(path);
+                    nodeEntires = LoadFromTorrent(path);
                 }
                 catch (Exception e)
                 {
@@ -97,7 +92,9 @@ namespace QuickLook.Plugin.TorrentViewer
                     return;
                 }
 
-                var files = this._fileEntries
+                var root = nodeEntires[string.Empty];
+
+                var files = nodeEntires
                     .Where(z => !z.Value.IsFolder)
                     .Select(z => z.Value)
                     .ToList();
@@ -127,8 +124,13 @@ namespace QuickLook.Plugin.TorrentViewer
             });
         }
 
-        private void LoadFromTorrent(string torrentPath)
+        private Dictionary<string, TorrentFileEntry> LoadFromTorrent(string torrentPath)
         {
+            var nodeEntries = new Dictionary<string, TorrentFileEntry>();
+
+            var root = new TorrentFileEntry(Path.GetFileName(torrentPath), true);
+            nodeEntries.Add(string.Empty, root);
+
             using (var stream = File.OpenRead(torrentPath))
             using (var reader = new BencodeReader(stream))
             {
@@ -138,22 +140,24 @@ namespace QuickLook.Plugin.TorrentViewer
                 switch (torrent.FileMode)
                 {
                     case TorrentFileMode.Single:
-                        ProcessFile(new[] { torrent.File.FileNameUtf8 ?? torrent.File.FileName }, torrent.File.FileSize);
+                        ProcessFile(
+                            new[] { torrent.File.FileNameUtf8 ?? torrent.File.FileName }, 
+                            torrent.File.FileSize, torrent.File.Md5Sum);
                         break;
 
 
                     case TorrentFileMode.Multi:
                         foreach (var item in torrent.Files)
                         {
-                            ProcessFile(item.PathUtf8 ?? item.Path, item.FileSize);
+                            ProcessFile(item.PathUtf8 ?? item.Path, item.FileSize, item.Md5Sum);
                         }
                         break;
                 }
 
                 this._magnetUri = TorrentUtil.CreateMagnetLink(torrent);
 
-                var torrentName = torrent.DisplayNameUtf8 ?? torrent.DisplayName ?? String.Empty;
-                var btih = torrent.OriginalInfoHash?.ToLower() ?? String.Empty;
+                var torrentName = torrent.DisplayNameUtf8 ?? torrent.DisplayName ?? string.Empty;
+                var btih = torrent.OriginalInfoHash?.ToLower() ?? string.Empty;
                 
                 this.Dispatcher.Invoke(() =>
                 {
@@ -165,7 +169,7 @@ namespace QuickLook.Plugin.TorrentViewer
                 });
             }
 
-            void ProcessFile(IList<string> pathList, long fileSize)
+            void ProcessFile(IList<string> pathList, long fileSize, string md5Sum)
             {
                 // process folders. When entry is a directory, all fragments are folders.
                 var parts = new List<string>();
@@ -176,18 +180,20 @@ namespace QuickLook.Plugin.TorrentViewer
                     var namePart = pathList[i];
                     parts.Add(namePart);
                     var path = Path.Combine(parts.ToArray());
-                    if (!_fileEntries.ContainsKey(path))
+                    if (!nodeEntries.ContainsKey(path))
                     {
-                        _fileEntries.TryGetValue(Path.GetDirectoryName(path) ?? "", out var parent);
-                        var afe = new TorrentFileEntry(namePart, isFolder, parent);
-                        _fileEntries.Add(path, afe);
+                        nodeEntries.TryGetValue(Path.GetDirectoryName(path) ?? "", out var parent);
+                        var entry = new TorrentFileEntry(namePart, isFolder, parent, md5Sum);
+                        nodeEntries.Add(path, entry);
                         if (!isFolder)
                         {
-                            afe.Size = (ulong)Math.Max(0, fileSize);
+                            entry.Size = (ulong)Math.Max(0, fileSize);
                         }
                     }
                 }
             }
+
+            return nodeEntries;
         }
 
         [NotifyPropertyChangedInvocator]

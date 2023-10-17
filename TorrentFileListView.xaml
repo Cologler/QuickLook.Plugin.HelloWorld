@@ -25,6 +25,7 @@
             <local:DatePrintConverter x:Key="DatePrintConverter" />
             <local:FileExtToIconConverter x:Key="FileExtToIconConverter" />
             <local:LevelToBooleanConverter x:Key="LevelToBooleanConverter" />
+            <local:EmptyToCollapsedValueConverter x:Key="EmptyToCollapsedValueConverter" />
 
             <!-- Template for directory information at all levels -->
             <HierarchicalDataTemplate ItemsSource="{Binding VisibileChildren}"
@@ -40,7 +41,10 @@
                             <ColumnDefinition />
                             <ColumnDefinition MinWidth="100"
                                               SharedSizeGroup="SizeColumn" />
+                            <ColumnDefinition MinWidth="100"
+                                              SharedSizeGroup="Md5SumColumn" />
                         </Grid.ColumnDefinitions>
+                        
                         <StackPanel Grid.Column="0"
                                     Orientation="Horizontal">
                             <Image Width="16"
@@ -55,6 +59,7 @@
                             <TextBlock Text="{Binding Name}"
                                        Margin="2,0,0,0" />
                         </StackPanel>
+                        
                         <Rectangle Grid.Column="1">
                             <Rectangle.Width>
                                 <MultiBinding Converter="{StaticResource LevelToIndentConverter}">
@@ -64,6 +69,7 @@
                                 </MultiBinding>
                             </Rectangle.Width>
                         </Rectangle>
+                        
                         <TextBlock Grid.Column="2"
                                    Margin="4,0,0,0">
                             <TextBlock.Text>
@@ -73,6 +79,24 @@
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
+
+                        <Grid Grid.Column="3"
+                              Margin="4,0,0,0"
+                              Background="Transparent"
+                              ToolTip="MD5"
+                              Visibility="{Binding Md5Sum, Converter={StaticResource EmptyToCollapsedValueConverter}}">
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Copy Md5 (Lower)"
+                                              Click="CopyMd5SumLower_Click"/>
+                                    <MenuItem Header="Copy Md5 (Upper)"
+                                              Click="CopyMd5SumUpper_Click" />
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+                            <TextBlock Text="{Binding Md5Sum}"
+                                       Margin="4,0"/>
+                        </Grid>
+                            
                     </Grid>
                 </Grid>
             </HierarchicalDataTemplate>
@@ -92,6 +116,7 @@
                             <ColumnDefinition SharedSizeGroup="NameColumn" />
                             <ColumnDefinition />
                             <ColumnDefinition SharedSizeGroup="SizeColumn" />
+                            <ColumnDefinition SharedSizeGroup="Md5SumColumn" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
                                    Text=" " />
