@@ -154,10 +154,17 @@ namespace QuickLook.Plugin.TorrentViewer
                         break;
                 }
 
-                this._magnetUri = TorrentUtil.CreateMagnetLink(torrent);
+                var infohash = torrent.OriginalInfoHash.ToLower();
+
+                // must use original infohash, BencodeNET ignore some fields from the torrent
+                // see: https://github.com/Krusen/BencodeNET/issues/62
+                this._magnetUri = TorrentUtil.CreateMagnetLink(
+                    infohash,
+                    torrent.DisplayName,
+                    torrent.Trackers.SelectMany(x => x),
+                    MagnetLinkOptions.IncludeTrackers);
 
                 var torrentName = torrent.DisplayNameUtf8 ?? torrent.DisplayName ?? string.Empty;
-                var btih = torrent.OriginalInfoHash?.ToLower() ?? string.Empty;
                 
                 this.Dispatcher.Invoke(() =>
                 {
@@ -165,7 +172,7 @@ namespace QuickLook.Plugin.TorrentViewer
                         return;
 
                     this.TorrentName.Content = $"Name: {torrentName}";
-                    this.TorrentBtih.Content = $"BTIH: {btih}";
+                    this.TorrentBtih.Content = $"BTIH: {infohash}";
                 });
             }
 
